@@ -1,5 +1,8 @@
 FROM ubuntu:18.04
 
+ENV BUILD_GROUPS=4
+ENV BUILD_THREADS=10
+
 RUN apt-get update && apt-get install -y  \
                 autoconf \
                 automake \
@@ -38,20 +41,12 @@ RUN cd / && git clone https://github.com/mxe/mxe.git
 
 RUN echo "MXE_PLUGIN_DIRS += plugins/gcc8\n" > /mxe/settings.mk
 #MXE_TARGETS := i686-w64-mingw32.static.posix i686-w64-mingw32.shared.posix x86_64-w64-mingw32.shared.posix x86_64-w64-mingw32.static.posix
-RUN cd /mxe && make  \
-                download-cc \
-                --jobs=8 JOBS=1
 
-RUN echo "building thread count " `grep -c ^processor /proc/cpuinfo`
 
 RUN cd /mxe && make MXE_TARGETS='i686-w64-mingw32.static.posix i686-w64-mingw32.shared.posix x86_64-w64-mingw32.shared.posix x86_64-w64-mingw32.static.posix' \
                 cc \
-                --jobs=1 JOBS=`grep -c ^processor /proc/cpuinfo`
-ENV PATH="/mxe/usr/bin:${PATH}"
-
-RUN cd /mxe && make MXE_TARGETS='i686-w64-mingw32.static.posix i686-w64-mingw32.shared.posix x86_64-w64-mingw32.shared.posix x86_64-w64-mingw32.static.posix' \
                 cmake \
                 autotools \
-                --jobs=1 JOBS=`grep -c ^processor /proc/cpuinfo`
-
-RUN cd /mxe && make clean-pkg && make clean-junk
+                --jobs=$BUILD_GROUPS JOBS=$BUILD_THREADS \
+                && make clean-pkg && make clean-junk
+ENV PATH="/mxe/usr/bin:${PATH}"
