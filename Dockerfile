@@ -42,14 +42,16 @@ RUN cd /mxe && make  \
                 download-cc \
                 --jobs=8 JOBS=1
 
+RUN echo "building thread count " `grep -c ^processor /proc/cpuinfo`
+
 RUN cd /mxe && make MXE_TARGETS='i686-w64-mingw32.static.posix i686-w64-mingw32.shared.posix x86_64-w64-mingw32.shared.posix x86_64-w64-mingw32.static.posix' \
                 cc \
-                --jobs=1 JOBS=8
+                --jobs=1 JOBS=`grep -c ^processor /proc/cpuinfo`
 ENV PATH="/mxe/usr/bin:${PATH}"
 
 RUN cd /mxe && make MXE_TARGETS='i686-w64-mingw32.static.posix i686-w64-mingw32.shared.posix x86_64-w64-mingw32.shared.posix x86_64-w64-mingw32.static.posix' \
                 cmake \
                 autotools \
-                --jobs=1 JOBS=8
+                --jobs=1 JOBS=`grep -c ^processor /proc/cpuinfo`
 
 RUN cd /mxe && make clean-pkg && make clean-junk
