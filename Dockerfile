@@ -1,7 +1,7 @@
 FROM ubuntu:18.04
 
-ENV BUILD_GROUPS=4
-ENV BUILD_THREADS=10
+ENV BUILD_GROUPS=2
+ENV BUILD_THREADS=16
 
 RUN apt-get update && apt-get install -y  \
                 autoconf \
@@ -37,13 +37,13 @@ RUN apt-get update && apt-get install -y  \
                 wget \
                 xz-utils
 
-RUN cd / && git clone https://github.com/mxe/mxe.git
+RUN cd / && git clone https://github.com/mxe/mxe.git && cd /mxe && git checkout 35dfb3d
 
 RUN echo "MXE_PLUGIN_DIRS += plugins/gcc8\n" > /mxe/settings.mk
 #MXE_TARGETS := i686-w64-mingw32.static.posix i686-w64-mingw32.shared.posix x86_64-w64-mingw32.shared.posix x86_64-w64-mingw32.static.posix
 
 
-RUN cd /mxe && make MXE_TARGETS='i686-w64-mingw32.static.posix i686-w64-mingw32.shared.posix x86_64-w64-mingw32.shared.posix x86_64-w64-mingw32.static.posix' \
+RUN cd /mxe && make MXE_TARGETS='x86_64-w64-mingw32.shared.posix x86_64-w64-mingw32.static.posix' \
                 cc \
                 cmake \
                 autotools \
