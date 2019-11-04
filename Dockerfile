@@ -37,7 +37,7 @@ RUN apt-get update && apt-get install -y  \
                 wget \
                 xz-utils
 
-RUN cd / && git clone https://github.com/mxe/mxe.git && cd /mxe && git checkout 35dfb3d
+RUN cd / && git clone https://github.com/mxe/mxe.git && cd /mxe
 
 RUN echo "MXE_PLUGIN_DIRS += plugins/gcc8\n" > /mxe/settings.mk
 #MXE_TARGETS := i686-w64-mingw32.static.posix i686-w64-mingw32.shared.posix x86_64-w64-mingw32.shared.posix x86_64-w64-mingw32.static.posix
