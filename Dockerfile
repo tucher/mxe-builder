@@ -1,7 +1,8 @@
-FROM ubuntu:18.04
+FROM ubuntu:21.10
 
-ENV BUILD_GROUPS=2
-ENV BUILD_THREADS=16
+ENV BUILD_GROUPS=1
+ENV BUILD_THREADS=8
+ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get update && apt-get install -y  \
                 autoconf \
@@ -37,9 +38,9 @@ RUN apt-get update && apt-get install -y  \
                 wget \
                 xz-utils
 
-RUN cd / && git clone https://github.com/mxe/mxe.git && cd /mxe
+RUN cd / && git clone https://github.com/mxe/mxe.git && cd /mxe && git checkout 8838ac3938cd8e47424a4cb5d3676d1ae9a4d670
 
-RUN echo "MXE_PLUGIN_DIRS += plugins/gcc9\n" > /mxe/settings.mk
+RUN echo "MXE_PLUGIN_DIRS += plugins/gcc11\n" > /mxe/settings.mk
 #MXE_TARGETS := i686-w64-mingw32.static.posix i686-w64-mingw32.shared.posix x86_64-w64-mingw32.shared.posix x86_64-w64-mingw32.static.posix
 
 
