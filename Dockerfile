@@ -1,4 +1,4 @@
-FROM ubuntu:21.10
+FROM ubuntu:22.04
 
 ENV BUILD_GROUPS=1
 ENV BUILD_THREADS=8
@@ -13,14 +13,13 @@ RUN apt-get update && apt-get install -y  \
                 bzip2 \
                 flex \
                 g++ \
-                g++-multilib \
                 gettext \
                 git \
                 gperf \
                 intltool \
-                libc6-dev-i386 \
                 libgdk-pixbuf2.0-dev \
                 libltdl-dev \
+                libgl-dev \
                 libssl-dev \
                 libtool-bin \
                 libxml-parser-perl \
@@ -30,19 +29,19 @@ RUN apt-get update && apt-get install -y  \
                 p7zip-full \
                 patch \
                 perl \
-                pkg-config \
-                python \
+                python3 \
+                python3-mako \
+                python3-pkg-resources \
+                python-is-python3 \
                 ruby \
                 sed \
                 unzip \
                 wget \
                 xz-utils
 
-RUN cd / && git clone https://github.com/mxe/mxe.git && cd /mxe && git checkout 8838ac3938cd8e47424a4cb5d3676d1ae9a4d670
+RUN cd / && git clone https://github.com/mxe/mxe.git && cd /mxe && git checkout b57aabf11c6ade24df97c0fc953092ca80dac799
 
-RUN echo "MXE_PLUGIN_DIRS += plugins/gcc11\n" > /mxe/settings.mk
-#MXE_TARGETS := i686-w64-mingw32.static.posix i686-w64-mingw32.shared.posix x86_64-w64-mingw32.shared.posix x86_64-w64-mingw32.static.posix
-
+RUN echo "MXE_PLUGIN_DIRS += plugins/gcc13\n" > /mxe/settings.mk
 
 RUN cd /mxe && make MXE_TARGETS='x86_64-w64-mingw32.shared.posix x86_64-w64-mingw32.static.posix' \
                 cc \

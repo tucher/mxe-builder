@@ -1,3 +1,1 @@
-docker build  -t mxe-builder .
-docker tag mxe-builder tucher/mxe-builder
-docker push tucher/mxe-builder
+docker buildx build --platform linux/amd64,linux/arm64 --push -t tucher/mxe-builder:gcc13 .
