@@ -1,7 +1,7 @@
 FROM ubuntu:22.04
 
 ENV BUILD_GROUPS=1
-ENV BUILD_THREADS=8
+ENV BUILD_THREADS=10
 ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get update && apt-get install -y  \
@@ -39,7 +39,7 @@ RUN apt-get update && apt-get install -y  \
                 wget \
                 xz-utils
 
-RUN cd / && git clone https://github.com/mxe/mxe.git && cd /mxe && git checkout b57aabf11c6ade24df97c0fc953092ca80dac799
+RUN cd / && git clone https://github.com/mxe/mxe.git && cd /mxe && git checkout 70e31e42f0584fea37aa46a74dcaa6e4eecd4304
 
 RUN echo "MXE_PLUGIN_DIRS += plugins/gcc13\n" > /mxe/settings.mk
 
